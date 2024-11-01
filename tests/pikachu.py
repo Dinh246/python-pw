@@ -24,21 +24,12 @@ def test_pikachu_game(page: Page):
     expect(pikachu_page.player_info).to_be_visible()
     expect(pikachu_page.grid_boxes.first).to_be_visible()
 
-    # Handle alert after finished
-    dialog_message = None
-
-    def handle_dialog(dialog):
-        nonlocal dialog_message
-        dialog_message = dialog.message
-        dialog.accept()
-
-    page.once("dialog", handle_dialog)
-
     # Start matching same grids
     all_unique_nums = pikachu_page.get_all_unique_grids()
     for num in all_unique_nums:
         pikachu_page.select_same_grids(num)
 
+    #Expect all grids are faded and dialog message content
     for grid in pikachu_page.grid_boxes.all():
         expect(grid).to_have_class(re.compile(r"fade-out"))
-    assert dialog_message == "Bạn đã thắng cuộc!"
+    handler.verify_dialog_message("Bạn đã thắng cuộc!")

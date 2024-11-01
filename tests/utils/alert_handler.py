@@ -6,14 +6,11 @@ class AlertHandler:
     def __init__(self, page):
         self.page = page
         self.dialog_message = None
+        self.page.once('dialog', self.handle_dialog)
 
-    def accept_dialog(self):
-        dialog_message = None
+    def handle_dialog(self, dialog):
+        self.dialog_message = dialog.message
+        dialog.accept()
 
-        def handle_dialog(dialog):
-            nonlocal dialog_message
-            dialog_message = dialog.message
-            dialog.accept()
-
-        self.page.once("dialog", handle_dialog)
-        return dialog_message
+    def verify_dialog_message(self, message):
+        assert self.dialog_message == message
