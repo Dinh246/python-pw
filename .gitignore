@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+.vscode
+*.log
+pypw-3.11
+test-results
